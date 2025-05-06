@@ -41,15 +41,24 @@ consideraciones:
 ## 3. instalar nodejs
 
 ver pagina: https://nodejs.org/
-hay 2 versiones: 16.16.0 LTS y 18.7.0 Actual (esta será la de trabajo de este demo)
+Versión 22.15.0
 
-### instalar version nodejs 18.x, ver página: https://techviewleo.com/how-to-install-node-js-18-lts-on-ubuntu/
+### instalar version nodejs 22.x
 
     sudo apt update
 
-    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+# Download and install fnm:
+curl -o- https://fnm.vercel.app/install | bash
 
-    sudo apt install nodejs
+# Download and install Node.js:
+fnm install 22
+
+# Verify the Node.js version:
+node -v # Should print "v22.15.0".
+
+# Verify npm version:
+npm -v # Should print "10.9.2".
+
 
 ### probar versiones:
 
@@ -59,24 +68,9 @@ hay 2 versiones: 16.16.0 LTS y 18.7.0 Actual (esta será la de trabajo de este d
 
 # instalar mongodb en ubuntu 22.04
 
-## ref: https://www.mongodb.com/docs/v6.0/tutorial/install-mongodb-on-ubuntu/
+## ir a la página: https://www.mongodb.com/try/download/community
+## opcion de descarga en diferentes sistemas operativos
 
-    sudo apt-get install gnupg
-
-    curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
-    sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg \
-    --dearmor
-
-    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-
-    sudo apt-get update
-
-    sudo apt-get install -y mongodb-org
-
-    sudo systemctl enable mongod
-
-    sudo systemctl daemon-reload
-
-    sudo systemctl start mongod
+## probar mongodb:
 
     mongosh
