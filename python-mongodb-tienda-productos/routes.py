@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from bson.objectid import ObjectId
-from models import get_producto_model, listar_productos
+from models import listar_productos, adicionar_producto, update_producto, delete_producto
 
 producto_blueprint = Blueprint('producto', __name__)
 
@@ -12,22 +12,16 @@ def obtener_productos():
 @producto_blueprint.route('/insertar', methods=['POST'])
 def insertar_producto():
     data = request.json
-    producto = get_producto_model(producto_blueprint.app.mongo).insert_one(data)
-    data['_id'] = str(producto.inserted_id)
-    return jsonify(data), 201
+    resultid = adicionar_producto(current_app.mongo, data)
+    return jsonify({resultid})
 
 @producto_blueprint.route('/actualizar/<id>', methods=['PATCH'])
 def actualizar_producto(id):
     data = request.json
-    get_producto_model(producto_blueprint.app.mongo).update_one(
-        {"_id": ObjectId(id)},
-        {"$set": data}
-    )
-    return jsonify({"mensaje": "Producto actualizado"}), 200
+    result = update_producto(current_app.mongo,id,data)
+    return jsonify({"documentos modificados": result}), 200
 
 @producto_blueprint.route('/eliminar/<id>', methods=['DELETE'])
 def eliminar_producto(id):
-    resultado = get_producto_model(producto_blueprint.app.mongo).delete_one({"_id": ObjectId(id)})
-    if resultado.deleted_count == 0:
-        return jsonify({"error": "Producto no encontrado"}), 404
-    return jsonify({"mensaje": "Producto eliminado"}), 200
+    resultado = delete_producto(current_app.mongo, id)
+    return resultado
