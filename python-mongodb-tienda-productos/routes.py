@@ -1,17 +1,13 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from bson.objectid import ObjectId
-from models import get_producto_model
+from models import get_producto_model, listar_productos
 
 producto_blueprint = Blueprint('producto', __name__)
 
 @producto_blueprint.route('/', methods=['GET'])
 def obtener_productos():
-    productos = get_producto_model(producto_blueprint.app.mongo).find()
-    resultado = []
-    for p in productos:
-        p['_id'] = str(p['_id'])
-        resultado.append(p)
-    return jsonify(resultado)
+    productos = listar_productos(current_app.mongo)
+    return jsonify(productos)
 
 @producto_blueprint.route('/insertar', methods=['POST'])
 def insertar_producto():
